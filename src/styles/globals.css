@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: theme("fontFamily.body");
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+  }
+  body {
+    @apply text-ink;
+  }
+}
+
+@layer components {
+  /* Glassmorphism card used by the reminder popup and dashboard panels */
+  .glass {
+    @apply rounded-blob shadow-glass border border-white/50;
+    background: linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.85) 0%,
+      rgba(214, 244, 247, 0.75) 100%
+    );
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+  .dark .glass {
+    @apply border-white/10;
+    background: linear-gradient(
+      160deg,
+      rgba(40, 48, 66, 0.88) 0%,
+      rgba(28, 42, 58, 0.82) 100%
+    );
+  }
+
+  .btn {
+    @apply font-cute rounded-full px-6 py-3 text-base font-semibold transition
+      active:scale-95 focus:outline-none focus-visible:ring-4 focus-visible:ring-aqua-200;
+  }
+  .btn-primary {
+    @apply btn bg-aqua-400 text-white shadow-soft hover:bg-aqua-500;
+  }
+  .btn-secondary {
+    @apply btn bg-white/70 text-ink hover:bg-white dark:bg-white/10 dark:text-cream dark:hover:bg-white/20;
+  }
+}
