@@ -38,7 +38,7 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
-    "category": "Healthcare",
+    "category": "Healthcare and Fitness",
     "shortDescription": "Pengu, a cute desktop buddy that reminds you to drink water.",
     "macOS": {
       "minimumSystemVersion": "10.15"
