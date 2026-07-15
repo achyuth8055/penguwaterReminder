@@ -7,14 +7,29 @@ export type Theme = "light" | "dark";
 /** Multiplier applied to all character animations (0.5 = slow … 2 = fast). */
 export type AnimationSpeed = 0.5 | 0.75 | 1 | 1.5 | 2;
 
+/**
+ * Office-hours window. While active (and enabled), Pengu uses neutral
+ * "public" messages — no pet names on the office screen. Outside it,
+ * the cozy "private" messages play.
+ */
+export interface OfficeMode {
+  enabled: boolean;
+  /** "HH:MM" 24h local time */
+  start: string;
+  end: string;
+  /** Active weekdays, 0 = Sunday … 6 = Saturday */
+  days: number[];
+}
+
 export interface Settings {
   theme: Theme;
   character: Character | null; // null until onboarding completes
-  intervalMinutes: number; // 30 | 45 | 60 | 90 | custom
+  intervalMinutes: number; // 30 | 45 | 60 | 90 | … | custom
   startOnLogin: boolean;
   soundEnabled: boolean;
   animationSpeed: AnimationSpeed;
   dailyGoalGlasses: number;
+  officeMode: OfficeMode;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -25,7 +40,16 @@ export const DEFAULT_SETTINGS: Settings = {
   soundEnabled: true,
   animationSpeed: 1,
   dailyGoalGlasses: 8,
+  officeMode: {
+    enabled: true,
+    start: "08:30",
+    end: "17:50",
+    days: [1, 2, 3, 4, 5], // Mon–Fri
+  },
 };
+
+/** Which message set the reminder should use. */
+export type MessageMode = "public" | "private";
 
 /** One confirmed glass of water. */
 export interface WaterEntry {

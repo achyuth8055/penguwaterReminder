@@ -108,6 +108,74 @@ export function SettingsPage({ settings, update }: Props) {
         />
       </SettingRow>
 
+      {/* Office mode: neutral messages during work hours */}
+      <div className="py-4">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <p className="font-cute text-base font-semibold">Office mode</p>
+            <p className="text-sm opacity-60">
+              Work-safe messages during these hours — cozy ones after
+            </p>
+          </div>
+          <Toggle
+            checked={settings.officeMode.enabled}
+            onChange={(v) =>
+              void update({ officeMode: { ...settings.officeMode, enabled: v } })
+            }
+            label="Office mode"
+          />
+        </div>
+        {settings.officeMode.enabled && (
+          <div className="mt-3 flex flex-wrap items-center gap-3">
+            <span className="flex items-center gap-1.5 text-sm">
+              <input
+                type="time"
+                value={settings.officeMode.start}
+                onChange={(e) =>
+                  void update({ officeMode: { ...settings.officeMode, start: e.target.value } })
+                }
+                className="rounded-full bg-white/80 px-3 py-1.5 text-sm dark:bg-white/10"
+              />
+              <span className="opacity-60">to</span>
+              <input
+                type="time"
+                value={settings.officeMode.end}
+                onChange={(e) =>
+                  void update({ officeMode: { ...settings.officeMode, end: e.target.value } })
+                }
+                className="rounded-full bg-white/80 px-3 py-1.5 text-sm dark:bg-white/10"
+              />
+            </span>
+            <span className="flex gap-1">
+              {(["S", "M", "T", "W", "T", "F", "S"] as const).map((d, day) => {
+                const active = settings.officeMode.days.includes(day);
+                return (
+                  <button
+                    key={day}
+                    aria-pressed={active}
+                    onClick={() =>
+                      void update({
+                        officeMode: {
+                          ...settings.officeMode,
+                          days: active
+                            ? settings.officeMode.days.filter((x) => x !== day)
+                            : [...settings.officeMode.days, day].sort(),
+                        },
+                      })
+                    }
+                    className={`h-8 w-8 rounded-full font-cute text-xs font-semibold transition ${
+                      active ? "bg-aqua-400 text-white" : "bg-white/60 dark:bg-white/10"
+                    }`}
+                  >
+                    {d}
+                  </button>
+                );
+              })}
+            </span>
+          </div>
+        )}
+      </div>
+
       <SettingRow title="Start on login" hint="Keep reminders working after reboot">
         <Toggle
           checked={settings.startOnLogin}

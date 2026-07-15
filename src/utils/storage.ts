@@ -14,7 +14,13 @@ const HISTORY_KEY = "history";
 
 export async function loadSettings(): Promise<Settings> {
   const saved = await store.get<Partial<Settings>>(SETTINGS_KEY);
-  const merged = { ...DEFAULT_SETTINGS, ...saved };
+  const merged = {
+    ...DEFAULT_SETTINGS,
+    ...saved,
+    // Deep-merge nested objects so settings saved by older builds
+    // still pick up new fields' defaults.
+    officeMode: { ...DEFAULT_SETTINGS.officeMode, ...saved?.officeMode },
+  };
   // Migration: earlier builds had a third "pengu" character → now blue boy.
   if ((merged.character as string) === "pengu") merged.character = "boy";
   return merged;

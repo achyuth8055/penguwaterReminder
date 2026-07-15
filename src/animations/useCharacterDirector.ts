@@ -9,7 +9,27 @@
  * framer-motion transforms in the popup.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ClipName } from "@/types";
+import { ClipName, MessageMode } from "@/types";
+
+/**
+ * Message sets: "public" keeps it office-friendly (no pet names on a work
+ * screen); "private" is the cozy after-hours voice. Mode is chosen
+ * automatically from the office-hours schedule in Settings.
+ */
+const MESSAGES: Record<MessageMode, Record<"asking" | "celebrate" | "waving" | "snoozed", string>> = {
+  public: {
+    asking: "hai Pengu ❤️\ndid you drink water?",
+    celebrate: "yay! good job ❤️",
+    waving: "okay byee!\nI'll remind you next time slot",
+    snoozed: "okay… I'll come back\nin 5 minutes",
+  },
+  private: {
+    asking: "hai Pengu ❤️\ndid you drink water?",
+    celebrate: "yayy good job bebb ❤️",
+    waving: "I'll come back later\nto remind you again ❤️",
+    snoozed: "okay ❤️ bye bebb\nI'll remind you soon…",
+  },
+};
 
 export type Phase =
   | "entering"   // walking in from off-screen
@@ -42,6 +62,7 @@ const BLINK_EVERY_MS: [number, number] = [2500, 5500];
 export function useCharacterDirector(
   speed: number,
   onDone: (answer: "yes" | "later") => void,
+  mode: MessageMode = "private",
 ): Director {
   const [phase, setPhase] = useState<Phase>("entering");
   const [blinking, setBlinking] = useState(false);
@@ -113,11 +134,12 @@ export function useCharacterDirector(
     : blinking ? "blink"
     : "idle";
 
+  const texts = MESSAGES[mode];
   const bubbleText =
-    phase === "asking" ? "hai Pengu ❤️\ndid you drink water?"
-    : phase === "celebrate" ? "yayy good job bebb ❤️"
-    : phase === "waving" ? "I'll come back later\nto remind you again ❤️"
-    : phase === "snoozed" ? "okay ❤️ bye bebb\nI'll remind you soon…"
+    phase === "asking" ? texts.asking
+    : phase === "celebrate" ? texts.celebrate
+    : phase === "waving" ? texts.waving
+    : phase === "snoozed" ? texts.snoozed
     : null;
 
   return {

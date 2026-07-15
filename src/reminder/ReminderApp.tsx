@@ -15,6 +15,7 @@ import { playSound } from "@/utils/sound";
 import { CharacterSprite } from "@/components/character/CharacterSprite";
 import { SpeechBubble } from "@/components/character/SpeechBubble";
 import { useCharacterDirector } from "@/animations/useCharacterDirector";
+import { currentMode } from "@/utils/officeMode";
 import { DropIcon } from "@/components/ui/icons";
 
 const WALK_DISTANCE = 300; // px travelled when entering/leaving
@@ -51,7 +52,8 @@ export function ReminderApp() {
     }
   }, []);
 
-  const director = useCharacterDirector(speed, handleDone);
+  // Office hours (Mon–Fri 8:30–17:50 by default) → neutral "public" texts.
+  const director = useCharacterDirector(speed, handleDone, currentMode(settings.officeMode));
   const { phase, clip, floating, bubbleText, answerYes, answerLater } = director;
 
   const onYes = () => { playSound("success", settings.soundEnabled); answerYes(); };
