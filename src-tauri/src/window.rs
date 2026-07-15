@@ -19,7 +19,7 @@ pub fn show_reminder(app: &AppHandle) -> tauri::Result<()> {
         return Ok(());
     }
 
-    let win = WebviewWindowBuilder::new(
+    let builder = WebviewWindowBuilder::new(
         app,
         REMINDER_LABEL,
         WebviewUrl::App("reminder.html".into()),
@@ -29,15 +29,19 @@ pub fn show_reminder(app: &AppHandle) -> tauri::Result<()> {
     .transparent(true)
     .shadow(false)
     .always_on_top(true)
-    .visible_on_all_workspaces(true)
     .skip_taskbar(true)
     .resizable(false)
     .maximizable(false)
     .minimizable(false)
     .closable(false) // no OS close button / Alt+F4 shortcut path
     .focused(true) // modal: it SHOULD take focus until answered
-    .visible(false) // sized & positioned first (avoids flicker)
-    .build()?;
+    .visible(false); // sized & positioned first (avoids flicker)
+
+    // "All workspaces" is a macOS concept; setting it on Windows can fail.
+    #[cfg(target_os = "macos")]
+    let builder = builder.visible_on_all_workspaces(true);
+
+    let win = builder.build()?;
 
     // Cover the entire primary monitor so clicks anywhere are captured.
     if let Some(monitor) = win.primary_monitor()? {

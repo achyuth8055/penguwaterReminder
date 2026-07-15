@@ -32,13 +32,20 @@ pub fn get_schedule(scheduler: State<Arc<Scheduler>>) -> ScheduleState {
 }
 
 /// "Preview reminder" button / tray item — show the popup immediately.
+///
+/// IMPORTANT: this command MUST be `async`. On Windows, a synchronous
+/// command runs on the main thread and blocks it, but creating a webview
+/// window needs the main thread to process events → deadlock (the button
+/// appears to do nothing). Async commands run on a worker thread and the
+/// window creation is safely dispatched to the main loop.
 #[tauri::command]
-pub fn show_reminder_now(app: AppHandle) -> Result<(), String> {
+pub async fn show_reminder_now(app: AppHandle) -> Result<(), String> {
     window::show_reminder(&app).map_err(|e| e.to_string())
 }
 
 /// Called by the popup after its fade-out animation completes.
+/// (async for the same Windows main-thread reason as above)
 #[tauri::command]
-pub fn close_reminder(app: AppHandle) -> Result<(), String> {
+pub async fn close_reminder(app: AppHandle) -> Result<(), String> {
     window::close_reminder(&app).map_err(|e| e.to_string())
 }

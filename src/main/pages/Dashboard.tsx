@@ -50,7 +50,9 @@ export function Dashboard({ settings }: { settings: Settings }) {
         </div>
         <button
           className="btn-secondary text-sm"
-          onClick={() => void invoke("show_reminder_now")}
+          onClick={() =>
+            void invoke("show_reminder_now").catch((e) => console.error("preview failed:", e))
+          }
         >
           Preview reminder
         </button>

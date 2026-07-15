@@ -48,7 +48,13 @@ pub fn run() {
                         }
                     }
                     "drink" => {
-                        let _ = window::show_reminder(app);
+                        // Spawn off the event-loop thread (Windows-safe).
+                        let app = app.clone();
+                        tauri::async_runtime::spawn(async move {
+                            if let Err(e) = window::show_reminder(&app) {
+                                eprintln!("[tray] reminder failed: {e}");
+                            }
+                        });
                     }
                     "quit" => app.exit(0),
                     _ => {}

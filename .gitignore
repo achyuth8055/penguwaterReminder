@@ -3,3 +3,8 @@ dist
 src-tauri/target
 src-tauri/gen/schemas
 .DS_Store
+
+# Local build outputs (downloaded installers)
+*.exe
+*.dmg
+dist-share/

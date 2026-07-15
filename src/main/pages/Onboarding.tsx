@@ -6,7 +6,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Character, Settings } from "@/types";
 import { CharacterSprite } from "@/components/character/CharacterSprite";
-import { INTERVAL_PRESETS } from "@/main/constants";
+import { INTERVAL_PRESETS, formatInterval } from "@/main/constants";
 import { HeartIcon } from "@/components/ui/icons";
 
 interface Props {
@@ -71,7 +71,7 @@ export function Onboarding({ onComplete }: Props) {
                   : "bg-white/60 hover:bg-white dark:bg-white/10"
               }`}
             >
-              {m} min
+              {formatInterval(m)}
             </button>
           ))}
         </div>

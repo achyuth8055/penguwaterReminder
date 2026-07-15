@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Settings } from "@/types";
 import { Toggle } from "@/components/ui/Toggle";
 import { SettingRow } from "@/components/ui/SettingRow";
-import { INTERVAL_PRESETS, SPEED_OPTIONS } from "@/main/constants";
+import { INTERVAL_PRESETS, SPEED_OPTIONS, formatInterval } from "@/main/constants";
 import { HeartIcon } from "@/components/ui/icons";
 
 interface Props {
@@ -63,7 +63,7 @@ export function SettingsPage({ settings, update }: Props) {
                   : "bg-white/60 dark:bg-white/10"
               }`}
             >
-              {m}m
+              {formatInterval(m)}
             </button>
           ))}
           <button
@@ -79,11 +79,11 @@ export function SettingsPage({ settings, update }: Props) {
               <input
                 type="number"
                 min={1}
-                max={720}
+                max={1440}
                 value={custom}
                 onChange={(e) => setCustom(Number(e.target.value))}
                 onBlur={() => {
-                  const v = Math.min(Math.max(Math.round(custom) || 1, 1), 720);
+                  const v = Math.min(Math.max(Math.round(custom) || 1, 1), 1440);
                   setCustom(v);
                   void update({ intervalMinutes: v });
                 }}
