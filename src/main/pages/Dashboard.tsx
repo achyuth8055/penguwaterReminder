@@ -6,6 +6,7 @@ import { useSchedule } from "@/hooks/useSchedule";
 import { CharacterSprite } from "@/components/character/CharacterSprite";
 import { StatCard } from "@/main/components/StatCard";
 import { WeeklyChart } from "@/main/components/WeeklyChart";
+import { currentMode } from "@/utils/officeMode";
 import { DropIcon, FireIcon, TrophyIcon, CheckIcon } from "@/components/ui/icons";
 
 export function Dashboard({ settings }: { settings: Settings }) {
@@ -46,6 +47,12 @@ export function Dashboard({ settings }: { settings: Settings }) {
             {countdown
               ? `Next reminder in ${countdown}`
               : "Your buddy is on screen — answer the popup!"}
+            <span
+              className="ml-2 rounded-full bg-white/60 px-2 py-0.5 font-cute text-xs font-semibold dark:bg-white/10"
+              title="Which message style the next reminder will use"
+            >
+              {currentMode(settings.officeMode) === "public" ? "🏢 public mode" : "🏠 private mode"}
+            </span>
           </p>
         </div>
         <button

@@ -8,16 +8,17 @@ export type Theme = "light" | "dark";
 export type AnimationSpeed = 0.5 | 0.75 | 1 | 1.5 | 2;
 
 /**
- * Office-hours window. While active (and enabled), Pengu uses neutral
- * "public" messages — no pet names on the office screen. Outside it,
- * the cozy "private" messages play.
+ * Message-mode control.
+ *  - "auto":    public texts during the office window below, private outside
+ *  - "public":  always work-safe texts (manual override)
+ *  - "private": always cozy texts (manual override)
  */
 export interface OfficeMode {
-  enabled: boolean;
-  /** "HH:MM" 24h local time */
+  mode: "auto" | "public" | "private";
+  /** "HH:MM" 24h local time (used in auto mode) */
   start: string;
   end: string;
-  /** Active weekdays, 0 = Sunday … 6 = Saturday */
+  /** Active weekdays, 0 = Sunday … 6 = Saturday (used in auto mode) */
   days: number[];
 }
 
@@ -41,7 +42,7 @@ export const DEFAULT_SETTINGS: Settings = {
   animationSpeed: 1,
   dailyGoalGlasses: 8,
   officeMode: {
-    enabled: true,
+    mode: "auto",
     start: "08:30",
     end: "17:50",
     days: [1, 2, 3, 4, 5], // Mon–Fri

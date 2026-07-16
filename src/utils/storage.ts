@@ -23,6 +23,11 @@ export async function loadSettings(): Promise<Settings> {
   };
   // Migration: earlier builds had a third "pengu" character → now blue boy.
   if ((merged.character as string) === "pengu") merged.character = "boy";
+  // Migration: officeMode used to have `enabled: boolean` instead of `mode`.
+  const legacy = merged.officeMode as unknown as { enabled?: boolean; mode?: string };
+  if (legacy.mode === undefined) {
+    merged.officeMode.mode = legacy.enabled === false ? "private" : "auto";
+  }
   return merged;
 }
 

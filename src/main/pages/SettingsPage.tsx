@@ -108,24 +108,34 @@ export function SettingsPage({ settings, update }: Props) {
         />
       </SettingRow>
 
-      {/* Office mode: neutral messages during work hours */}
+      {/* Message mode: work-safe vs cozy texts */}
       <div className="py-4">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <p className="font-cute text-base font-semibold">Office mode</p>
+            <p className="font-cute text-base font-semibold">Message mode</p>
             <p className="text-sm opacity-60">
-              Work-safe messages during these hours — cozy ones after
+              Public = work-safe texts · Private = cozy texts · Auto = by schedule
             </p>
           </div>
-          <Toggle
-            checked={settings.officeMode.enabled}
-            onChange={(v) =>
-              void update({ officeMode: { ...settings.officeMode, enabled: v } })
-            }
-            label="Office mode"
-          />
+          <div className="flex gap-1">
+            {(["auto", "public", "private"] as const).map((m) => (
+              <button
+                key={m}
+                onClick={() =>
+                  void update({ officeMode: { ...settings.officeMode, mode: m } })
+                }
+                className={`rounded-full px-3 py-1.5 font-cute text-sm font-semibold capitalize ${
+                  settings.officeMode.mode === m
+                    ? "bg-aqua-400 text-white"
+                    : "bg-white/60 dark:bg-white/10"
+                }`}
+              >
+                {m}
+              </button>
+            ))}
+          </div>
         </div>
-        {settings.officeMode.enabled && (
+        {settings.officeMode.mode === "auto" && (
           <div className="mt-3 flex flex-wrap items-center gap-3">
             <span className="flex items-center gap-1.5 text-sm">
               <input

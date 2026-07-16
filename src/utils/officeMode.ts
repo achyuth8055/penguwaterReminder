@@ -8,7 +8,6 @@ function toMinutes(hhmm: string): number {
 
 /** True if `now` falls inside the configured office window. */
 export function isOfficeNow(office: OfficeMode, now: Date = new Date()): boolean {
-  if (!office.enabled) return false;
   if (!office.days.includes(now.getDay())) return false;
   const minutes = now.getHours() * 60 + now.getMinutes();
   const start = toMinutes(office.start);
@@ -20,5 +19,7 @@ export function isOfficeNow(office: OfficeMode, now: Date = new Date()): boolean
 }
 
 export function currentMode(office: OfficeMode, now: Date = new Date()): MessageMode {
+  if (office.mode === "public") return "public";   // manual override
+  if (office.mode === "private") return "private"; // manual override
   return isOfficeNow(office, now) ? "public" : "private";
 }
